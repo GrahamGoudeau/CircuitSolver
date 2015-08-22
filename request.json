@@ -1,0 +1,18 @@
+{
+    "components": {
+        "componentA": {
+            "type": "resistor",
+            "value": "5", // how to handle units?
+            "connections": [
+                "componentB"
+            ]
+        }
+        "componentB": {
+            "type": "capacitor",
+            "value": "10",
+            "connections": [
+                "componentA"
+            ]
+        }
+    }
+}
