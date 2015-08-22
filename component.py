@@ -3,7 +3,7 @@ def enum(*sequential, **named):
     enums = dict(zip(sequential, range(len(sequential))), **named)
     return type('Enum', (), enums)
 
-Component_Types = enum('RESISTOR', 'CAPACITOR')
+Two_Prong_Component_Types = enum('RESISTOR', 'CAPACITOR')
 
 class Node(object):
     def __init__(self, id):
@@ -57,16 +57,25 @@ class Circuit(object):
         self.node_map[str(node.get_id())] = node
 
     # expects two junction ids or None
-    def add_resistor(self, resistance, junctionA=None, junctionB=None):
+    def add_two_prong_component(self, component_type,
+                        value, junctionA=None, junctionB=None):
         id = self.__get_unique_id()
         if junctionA is None:
             junctionA = self.__get_unique_id()
         if junctionB is None:
             junctionB = self.__get_unique_id()
-        resistor = Resistor(id, resistance, junctionA, junctionB)
-        j1 = Junction(junctionA, [resistor])
-        j2 = Junction(junctionB, [resistor])
-        self.add_node_to_map(resistor)
+
+        if component_type == Two_Prong_Component_Types.RESISTOR:
+            class_type = Resistor
+        elif component_type == Two_Prong_Component_Types.CAPACITOR:
+            pass # not implemented yet
+        else:
+            raise Exception("Invalid component type")
+
+        component = class_type(id, value, junctionA, junctionB)
+        j1 = Junction(junctionA, [component])
+        j2 = Junction(junctionB, [component])
+        self.add_node_to_map(component)
         self.add_node_to_map(j1)
         self.add_node_to_map(j2)
         return (junctionA, junctionB)
@@ -90,6 +99,6 @@ class Circuit(object):
 if __name__ == "__main__":
     circuit = Circuit()
     # returns the ids of the two junctions it creates
-    j1, j2 = circuit.add_resistor(5)
+    j1, j2 = circuit.add_two_prong_component(Two_Prong_Component_Types.RESISTOR, 5)
     circuit.connect_junctions(j1, j2)
     circuit.debug_map()
