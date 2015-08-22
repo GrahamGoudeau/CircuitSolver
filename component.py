@@ -13,17 +13,21 @@ class Node(object):
         return self.id
 
 class Component(Node):
-    def __init__(self, id, junctionA, junctionB):
+    def __init__(self, id):
         super(Component, self).__init__(id)
+
+class Component_Two_Prongs(Component):
+    def __init__(self, id, junctionA, junctionB):
+        super(Component_Two_Prongs, self).__init__(id)
         self.junctionA = junctionA
         self.junctionB = junctionB
 
 class Junction(Node):
     def __init__(self, id, connections):
         super(Junction, self).__init__(id)
-        self.connections = connections # array of components
+        self.connections = connections # array of nodes
 
-class Resistor(Component):
+class Resistor(Component_Two_Prongs):
     def __init__(self, id, resistance, junctionA, junctionB):
         super(Resistor, self).__init__(id, junctionA, junctionB)
         self.resistance = resistance
@@ -85,6 +89,7 @@ class Circuit(object):
 
 if __name__ == "__main__":
     circuit = Circuit()
+    # returns the ids of the two junctions it creates
     j1, j2 = circuit.add_resistor(5)
     circuit.connect_junctions(j1, j2)
     circuit.debug_map()
