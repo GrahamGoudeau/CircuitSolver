@@ -10,8 +10,12 @@ class Component(Node):
     def __init__(self, id):
         """
         DESCRIPTION
+            Constructor for a component
         PARAMETERS
+            id, int, required
+                Unique id of component
         RETURNS
+            New instance of a component
         """
         super(Component, self).__init__(id)
 

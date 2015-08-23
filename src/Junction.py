@@ -10,8 +10,12 @@ class Junction(Node):
     def __init__(self, id):
         """
         DESCRIPTION
+            Constructor for a Junction
         PARAMETERS
+            id, int, required
+                Unique id of Junction
         RETURNS
+            New instance of a Junction
         """
         super(Junction, self).__init__(id)
         self.connections = [] # array of nodes
@@ -20,8 +24,13 @@ class Junction(Node):
     def add_connection(self, node):
         """
         DESCRIPTION
+            Adds a new connection to the junction, that connection could be 
+            a component or another junction
         PARAMETERS
+            node, Node, required
+                Node to connect junction to
         RETURNS
+            Nothing
         """
         self.connections.append(node)
 

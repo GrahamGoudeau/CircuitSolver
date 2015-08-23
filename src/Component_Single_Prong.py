@@ -9,8 +9,12 @@ class Component_Single_Prong(Component):
     def __init__(self, id, junction):
         """
         DESCRIPTION
+            Constructor for a single pronged component
         PARAMETERS
+            id, int, required
+                Unique id of single pronged component
         RETURNS
+            New instance of a single pronged component
         """
         super(Component_Single_Prong, self).__init__(id)
         self.junction = junction
@@ -27,8 +31,14 @@ class Open(Component_Single_Prong):
     def __init__(self, id, junction):
         """
         DESCRIPTION
+            Constructor for an open
         PARAMETERS
+            id, int, required
+                Unique id of the open
+            junction, Junction, required
+                Junction to connect open to
         RETURNS
+            New instance of an open
         """
         super(Open, self).__init__(id, junction)
 
