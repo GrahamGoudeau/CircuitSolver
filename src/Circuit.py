@@ -110,7 +110,25 @@ if __name__ == "__main__":
     circuit = Circuit()
     # returns the ids of the two junctions it creates
     j1, j2 = circuit.add_two_prong_component(Two_Prong_Component_Types.RESISTOR, 5)
+    circuit.add_two_prong_component(Two_Prong_Component_Types.RESISTOR, 5, j1, j2)
+    circuit.add_two_prong_component(Two_Prong_Component_Types.RESISTOR, 5, j1, j2)
+    circuit.add_two_prong_component(Two_Prong_Component_Types.RESISTOR, 5, j1)
+
     circuit.add_two_prong_component(Two_Prong_Component_Types.CAPACITOR, 10, j1, j2)
     _, y = circuit.add_two_prong_component(Two_Prong_Component_Types.RESISTOR, 100, j1)
     circuit.add_single_prong_component(Single_Prong_Component_Types.OPEN, y)
+
     circuit.debug_map()
+    list = circuit.get_all_junctions()
+    for index, j in enumerate(list):
+        print "Junction id: " + str(j.get_id())
+        parallel = []
+        for next in range(index + 1, len(list)):
+            parallel = [node.get_id() for node in j.connections if node in list[next].connections]
+            if len(parallel) >= 2:
+                print "\tIn parallel with " + str(list[next].get_id()) + ":"
+                print "\t",parallel
+        for c in j.connections:
+            print "\tConnected to: " + str(c.get_id())
+        if len(j.connections) == 2:
+            print "\tSeries: " + str(j.connections[0].get_id()) + " " + str(j.connections[1].get_id())
