@@ -10,12 +10,22 @@ class Circuit(object):
     """
     ###########################################################################
     def __init__(self, junctions=[]):
+        """
+        DESCRIPTION
+        PARAMETERS
+        RETURNS
+        """
         self.junctions = junctions
         self.current_id = 1 # increment every time we assign it
         self.node_map = {}
 
     ###########################################################################
     def debug_map(self):
+        """
+        DESCRIPTION
+        PARAMETERS
+        RETURNS
+        """
         keys = self.node_map.keys()
         for key in keys:
             print "Node id: " + key + " is " + str(self.node_map[key])
@@ -32,22 +42,42 @@ class Circuit(object):
 
     ###########################################################################
     def __get_unique_id(self):
+        """
+        DESCRIPTION
+        PARAMETERS
+        RETURNS
+        """
         ret_value = self.current_id
         self.current_id += 1
         return ret_value
 
     ###########################################################################
     def add_nodes_to_map(self, nodes):
+        """
+        DESCRIPTION
+        PARAMETERS
+        RETURNS
+        """
         for node in nodes:
             self.node_map[str(node.get_id())] = node
 
     ###########################################################################
     def add_node_to_map(self, node):
+        """
+        DESCRIPTION
+        PARAMETERS
+        RETURNS
+        """
         self.node_map[str(node.get_id())] = node
 
     ###########################################################################
     # expects a numeric id, returns None if not found
     def get_node(self, id):
+        """
+        DESCRIPTION
+        PARAMETERS
+        RETURNS
+        """
         return self.node_map.get(str(id), None)
 
     ###########################################################################
@@ -55,6 +85,11 @@ class Circuit(object):
     # creates new junctions and assigns IDs if not provided them
     def add_two_prong_component(self, component_type,
                         value, junction_id1=None, junction_id2=None):
+        """
+        DESCRIPTION
+        PARAMETERS
+        RETURNS
+        """
         id = self.__get_unique_id()
         if junction_id1 is None:
             junction_id1 = self.__get_unique_id()
@@ -88,6 +123,11 @@ class Circuit(object):
     # expects a member of the single prong type enum
     # creates a new junction and assigns an ID if not provided one
     def add_single_prong_component(self, component_type, junction_id=None):
+        """
+        DESCRIPTION
+        PARAMETERS
+        RETURNS
+        """
         id = self.__get_unique_id()
         if junction_id is None:
             junction_id = self.__get_unique_id()
@@ -111,7 +151,11 @@ class Circuit(object):
     ###########################################################################
     # expects the ids of both junctions, raises KeyException if an invalid ID
     def connect_junctions(self, junctionA, junctionB):
-        #FIXME maybe should combine into one junction we can discuss
+        """
+        DESCRIPTION
+        PARAMETERS
+        RETURNS
+        """
         j1 = self.node_map[str(junctionA)]
         j2 = self.node_map[str(junctionB)]
         j1.add_connection(j2)
@@ -119,6 +163,11 @@ class Circuit(object):
 
     ###########################################################################
     def get_all_junctions(self):
+        """
+        DESCRIPTION
+        PARAMETERS
+        RETURNS
+        """
         keys = self.node_map.keys()
         return [self.node_map[x] for x in keys if isinstance(self.node_map[x], Junction)]
 
