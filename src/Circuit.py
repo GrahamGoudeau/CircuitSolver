@@ -21,6 +21,8 @@ class Circuit(object):
             if isinstance(self.node_map[key], Junction):
                 for c in self.node_map[key].connections:
                     print "\tjunction connection id: " + str(c.get_id())
+            if isinstance(self.node_map[key], Component_Single_Prong.Open):
+                print "\tConnection: " + str(self.node_map[key].junction)
 
     def __get_unique_id(self):
         ret_value = self.current_id
@@ -96,6 +98,7 @@ class Circuit(object):
 
     # expects the ids of both junctions, raises KeyException if an invalid ID
     def connect_junctions(self, junctionA, junctionB):
+        #FIXME maybe should combine into one junction we can discuss
         j1 = self.node_map[str(junctionA)]
         j2 = self.node_map[str(junctionB)]
         j1.add_connection(j2)
