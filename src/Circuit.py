@@ -5,6 +5,9 @@ import Component_Two_Prongs
 
 ###############################################################################
 class Circuit(object):
+    """
+    Class Description
+    """
     ###########################################################################
     def __init__(self, junctions=[]):
         self.junctions = junctions

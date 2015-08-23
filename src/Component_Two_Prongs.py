@@ -2,6 +2,9 @@ from Component import Component
 
 ###############################################################################
 class Component_Two_Prongs(Component):
+    """
+    Class Description
+    """
     ###########################################################################
     def __init__(self, id, junctionA, junctionB):
         super(Component_Two_Prongs, self).__init__(id)
@@ -10,6 +13,9 @@ class Component_Two_Prongs(Component):
 
 ###############################################################################
 class Resistor(Component_Two_Prongs):
+    """
+    Class Description
+    """
     ###########################################################################
     def __init__(self, id, resistance, junctionA, junctionB):
         super(Resistor, self).__init__(id, junctionA, junctionB)
@@ -17,6 +23,9 @@ class Resistor(Component_Two_Prongs):
 
 ###############################################################################
 class Capacitor(Component_Two_Prongs):
+    """
+    Class Description
+    """
     ###########################################################################
     def __init__(self, id, capacitance, junctionA, junctionB):
         super(Capacitor, self).__init__(id, junctionA, junctionB)
