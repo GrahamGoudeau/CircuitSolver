@@ -41,12 +41,12 @@ class Circuit(object):
     # expects a member of the two prong type enum
     # creates new junctions and assigns IDs if not provided them
     def add_two_prong_component(self, component_type,
-                        value, junctionA=None, junctionB=None):
+                        value, junction_id1=None, junction_id2=None):
         id = self.__get_unique_id()
-        if junctionA is None:
-            junctionA = self.__get_unique_id()
-        if junctionB is None:
-            junctionB = self.__get_unique_id()
+        if junction_id1 is None:
+            junction_id1 = self.__get_unique_id()
+        if junction_id2 is None:
+            junction_id2 = self.__get_unique_id()
 
         if component_type == Two_Prong_Component_Types.RESISTOR:
             class_type = Component_Two_Prongs.Resistor
@@ -55,44 +55,44 @@ class Circuit(object):
         else:
             raise Exception('Invalid component type')
 
-        component = class_type(id, value, junctionA, junctionB)
-        j1 = self.get_node(junctionA)
-        if j1 is None:
-            j1 = Junction(junctionA)
-        j1.add_connection(component)
+        component = class_type(id, value, junction_id1, junction_id2)
+        junction_node1 = self.get_node(junction_id1)
+        if junction_node1 is None:
+            junction_node1 = Junction(junction_id1)
+        junction_node1.add_connection(component)
 
-        j2 = self.get_node(junctionB)
-        if j2 is None:
-            j2 = Junction(junctionB)
-        j2.add_connection(component)
+        junction_node2 = self.get_node(junction_id2)
+        if junction_node2 is None:
+            junction_node2 = Junction(junction_id2)
+        junction_node2.add_connection(component)
 
-        self.add_nodes_to_map([component, j1, j2])
+        self.add_nodes_to_map([component, junction_node1, junction_node2])
 
         # return a tuple of the junctions that were used
-        return (junctionA, junctionB)
+        return (junction_id1, junction_id2)
 
     # expects a member of the single prong type enum
     # creates a new junction and assigns an ID if not provided one
-    def add_single_prong_component(self, component_type, junction=None):
+    def add_single_prong_component(self, component_type, junction_id=None):
         id = self.__get_unique_id()
-        if junction is None:
-            junction = self.__get_unique_id()
+        if junction_id is None:
+            junction_id = self.__get_unique_id()
 
         if component_type == Single_Prong_Component_Types.OPEN:
             class_type = Component_Single_Prong.Open
         else:
             raise Exception('Invalid component type')
 
-        component = class_type(id, junction)
-        junction_node = self.get_node(junction)
+        component = class_type(id, junction_id)
+        junction_node = self.get_node(junction_id)
         if junction_node is None:
-            junction_node = Junction(junction)
+            junction_node = Junction(junction_id)
         junction_node.add_connection(component)
 
         self.add_nodes_to_map([component, junction_node])
 
         # return the ID of the junction that was used
-        return junction
+        return junction_id
 
     # expects the ids of both junctions, raises KeyException if an invalid ID
     def connect_junctions(self, junctionA, junctionB):

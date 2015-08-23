@@ -6,4 +6,3 @@ def enum(*sequential, **named):
 Two_Prong_Component_Types = enum('RESISTOR', 'CAPACITOR')
 
 Single_Prong_Component_Types = enum('OPEN')
-
