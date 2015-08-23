@@ -3,12 +3,15 @@ from Junction import Junction
 import Component_Single_Prong
 import Component_Two_Prongs
 
+###############################################################################
 class Circuit(object):
+    ###########################################################################
     def __init__(self, junctions=[]):
         self.junctions = junctions
         self.current_id = 1 # increment every time we assign it
         self.node_map = {}
 
+    ###########################################################################
     def debug_map(self):
         keys = self.node_map.keys()
         for key in keys:
@@ -24,22 +27,27 @@ class Circuit(object):
             if isinstance(self.node_map[key], Component_Single_Prong.Open):
                 print "\tConnection: " + str(self.node_map[key].junction)
 
+    ###########################################################################
     def __get_unique_id(self):
         ret_value = self.current_id
         self.current_id += 1
         return ret_value
 
+    ###########################################################################
     def add_nodes_to_map(self, nodes):
         for node in nodes:
             self.node_map[str(node.get_id())] = node
 
+    ###########################################################################
     def add_node_to_map(self, node):
         self.node_map[str(node.get_id())] = node
 
+    ###########################################################################
     # expects a numeric id, returns None if not found
     def get_node(self, id):
         return self.node_map.get(str(id), None)
 
+    ###########################################################################
     # expects a member of the two prong type enum
     # creates new junctions and assigns IDs if not provided them
     def add_two_prong_component(self, component_type,
@@ -73,6 +81,7 @@ class Circuit(object):
         # return a tuple of the junctions that were used
         return (junction_id1, junction_id2)
 
+    ###########################################################################
     # expects a member of the single prong type enum
     # creates a new junction and assigns an ID if not provided one
     def add_single_prong_component(self, component_type, junction_id=None):
@@ -96,6 +105,7 @@ class Circuit(object):
         # return the ID of the junction that was used
         return junction_id
 
+    ###########################################################################
     # expects the ids of both junctions, raises KeyException if an invalid ID
     def connect_junctions(self, junctionA, junctionB):
         #FIXME maybe should combine into one junction we can discuss
@@ -104,10 +114,12 @@ class Circuit(object):
         j1.add_connection(j2)
         j2.add_connection(j1)
 
+    ###########################################################################
     def get_all_junctions(self):
         keys = self.node_map.keys()
         return [self.node_map[x] for x in keys if isinstance(self.node_map[x], Junction)]
 
+###############################################################################
 # run the file as a standalone script to run the test
 if __name__ == "__main__":
     circuit = Circuit()
@@ -117,3 +129,4 @@ if __name__ == "__main__":
     _, y = circuit.add_two_prong_component(Two_Prong_Component_Types.RESISTOR, 100, j1)
     circuit.add_single_prong_component(Single_Prong_Component_Types.OPEN, y)
     circuit.debug_map()
+
