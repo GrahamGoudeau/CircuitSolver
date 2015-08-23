@@ -56,7 +56,7 @@ def main():
     circuit3.add_single_prong_component(Single_Prong_Component_Types.OPEN, j4)
     circuit3.debug_map()
     print "\n\n"
-    
+
     #circuit 4
     print "Circuit 4:"
     j1, j2 = circuit4.add_two_prong_component(Two_Prong_Component_Types.RESISTOR, 2)
@@ -266,7 +266,7 @@ def main():
     circuit21.add_single_prong_component(Single_Prong_Component_Types.OPEN, j2)
     circuit21.debug_map()
     print "\n\n"
-    
+
 ###############################################################################
 if __name__ == "__main__":
     main()
