@@ -3,7 +3,7 @@ from Component import Component
 ###############################################################################
 class Component_Single_Prong(Component):
     """
-    Class Description
+    A component with only one connection
     """
     ###########################################################################
     def __init__(self, id, junction):
@@ -18,7 +18,10 @@ class Component_Single_Prong(Component):
 ###############################################################################
 class Open(Component_Single_Prong):
     """
-    Class Description
+    A circuit component that describes a node to look into the circuit at. 
+    When computing equivalent resistance, capacitance, or inductance, 
+    there must be two of these in the circuit that define the equivalent 
+    resistance, capacitance, or inductance between those points
     """
     ###########################################################################
     def __init__(self, id, junction):

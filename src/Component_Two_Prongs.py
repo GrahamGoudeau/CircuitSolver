@@ -3,7 +3,7 @@ from Component import Component
 ###############################################################################
 class Component_Two_Prongs(Component):
     """
-    Class Description
+    A circuit component that has two connections
     """
     ###########################################################################
     def __init__(self, id, junctionA, junctionB):
@@ -19,7 +19,7 @@ class Component_Two_Prongs(Component):
 ###############################################################################
 class Resistor(Component_Two_Prongs):
     """
-    Class Description
+    Representation of a resistor
     """
     ###########################################################################
     def __init__(self, id, resistance, junctionA, junctionB):
@@ -34,7 +34,7 @@ class Resistor(Component_Two_Prongs):
 ###############################################################################
 class Capacitor(Component_Two_Prongs):
     """
-    Class Description
+    Representation of a capacitor
     """
     ###########################################################################
     def __init__(self, id, capacitance, junctionA, junctionB):

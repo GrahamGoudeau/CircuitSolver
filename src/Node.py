@@ -1,7 +1,7 @@
 ###############################################################################
 class Node(object):
     """
-    Class Description
+    An object that can connect to any other object in a circuit
     """
     ###########################################################################
     def __init__(self, id):

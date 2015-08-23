@@ -3,7 +3,8 @@ from Node import Node
 ###############################################################################
 class Junction(Node):
     """
-    Class Description
+    Is an element of a circuit that connects two or more components together.
+    Components are never connected directly together
     """
     ###########################################################################
     def __init__(self, id):

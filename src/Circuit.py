@@ -6,7 +6,8 @@ import Component_Two_Prongs
 ###############################################################################
 class Circuit(object):
     """
-    Class Description
+    Representation of a circuit. Holds nodes (components and junctions) and 
+    information about their connections and properties
     """
     ###########################################################################
     def __init__(self, junctions=[]):
