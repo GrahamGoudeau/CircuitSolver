@@ -5,6 +5,8 @@ def enum(*sequential, **named):
 
 Two_Prong_Component_Types = enum('RESISTOR', 'CAPACITOR')
 
+Single_Prong_Component_Types = enum('OPEN')
+
 class Node(object):
     def __init__(self, id):
         self.id = id
@@ -21,6 +23,15 @@ class Component_Two_Prongs(Component):
         super(Component_Two_Prongs, self).__init__(id)
         self.junctionA = junctionA
         self.junctionB = junctionB
+
+class Component_Single_Prong(Component):
+    def __init__(self, id, junction):
+        super(Component_Single_Prong, self).__init__(id)
+        self.junction = junction
+
+class Open(Component_Single_Prong):
+    def __init__(self, id, junction):
+        super(Open, self).__init__(id, junction)
 
 class Junction(Node):
     def __init__(self, id):
@@ -50,7 +61,8 @@ class Circuit(object):
         keys = self.node_map.keys()
         for key in keys:
             print "Node id: " + key + " is " + str(self.node_map[key])
-            if not isinstance(self.node_map[key], Junction):
+            if not isinstance(self.node_map[key], Junction) and \
+                not isinstance(self.node_map[key], Open):
                 print "\tConnections: " + str(self.node_map[key].junctionA) + " " + str(self.node_map[key].junctionB)
             if isinstance(self.node_map[key], Resistor):
                 print "\tResistance: " + str(self.node_map[key].resistance)
@@ -70,6 +82,10 @@ class Circuit(object):
     def add_node_to_map(self, node):
         self.node_map[str(node.get_id())] = node
 
+    # expects a numeric id, returns None if not found
+    def get_node(self, id):
+        return self.node_map.get(str(id), None)
+
     # expects two junction ids or None
     def add_two_prong_component(self, component_type,
                         value, junctionA=None, junctionB=None):
@@ -84,21 +100,44 @@ class Circuit(object):
         elif component_type == Two_Prong_Component_Types.CAPACITOR:
             class_type = Capacitor
         else:
-            raise Exception("Invalid component type")
+            raise Exception('Invalid component type')
 
         component = class_type(id, value, junctionA, junctionB)
-        j1 = self.node_map.get(str(junctionA), None)
+        j1 = self.get_node(junctionA)
         if j1 is None:
             j1 = Junction(junctionA)
         j1.add_connection(component)
 
-        j2 = self.node_map.get(str(junctionB), None)
+        j2 = self.get_node(junctionB)
         if j2 is None:
             j2 = Junction(junctionB)
         j2.add_connection(component)
 
         self.add_nodes_to_map([component, j1, j2])
+
+        # return a tuple of the junctions that were used
         return (junctionA, junctionB)
+
+    def add_single_prong_component(self, component_type, junction=None):
+        id = self.__get_unique_id()
+        if junction is None:
+            junction = self.__get_unique_id()
+
+        if component_type == Single_Prong_Component_Types.OPEN:
+            class_type = Open
+        else:
+            raise Exception('Invalid component type')
+
+        component = class_type(id, junction)
+        junction_node = self.get_node(junction)
+        if junction_node is None:
+            junction_node = Junction(junction)
+        junction_node.add_connection(component)
+
+        self.add_nodes_to_map([component, junction_node])
+
+        # return the ID of the junction that was used
+        return junction
 
     # expects the ids of both junctions
     def connect_junctions(self, junctionA, junctionB):
@@ -122,5 +161,6 @@ if __name__ == "__main__":
     # returns the ids of the two junctions it creates
     j1, j2 = circuit.add_two_prong_component(Two_Prong_Component_Types.RESISTOR, 5)
     circuit.add_two_prong_component(Two_Prong_Component_Types.CAPACITOR, 10, j1, j2)
-    circuit.add_two_prong_component(Two_Prong_Component_Types.RESISTOR, 100, j1, j2)
+    _, y = circuit.add_two_prong_component(Two_Prong_Component_Types.RESISTOR, 100, j1)
+    circuit.add_single_prong_component(Single_Prong_Component_Types.OPEN, y)
     circuit.debug_map()
