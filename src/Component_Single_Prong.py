@@ -8,4 +8,3 @@ class Component_Single_Prong(Component):
 class Open(Component_Single_Prong):
     def __init__(self, id, junction):
         super(Open, self).__init__(id, junction)
-

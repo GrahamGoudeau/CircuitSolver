@@ -15,4 +15,3 @@ class Capacitor(Component_Two_Prongs):
     def __init__(self, id, capacitance, junctionA, junctionB):
         super(Capacitor, self).__init__(id, junctionA, junctionB)
         self.capacitance = capacitance
-
