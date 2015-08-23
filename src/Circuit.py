@@ -38,7 +38,8 @@ class Circuit(object):
     def get_node(self, id):
         return self.node_map.get(str(id), None)
 
-    # expects two junction ids or None
+    # expects a member of the two prong type enum
+    # creates new junctions and assigns IDs if not provided them
     def add_two_prong_component(self, component_type,
                         value, junctionA=None, junctionB=None):
         id = self.__get_unique_id()
@@ -70,6 +71,8 @@ class Circuit(object):
         # return a tuple of the junctions that were used
         return (junctionA, junctionB)
 
+    # expects a member of the single prong type enum
+    # creates a new junction and assigns an ID if not provided one
     def add_single_prong_component(self, component_type, junction=None):
         id = self.__get_unique_id()
         if junction is None:
@@ -91,23 +94,18 @@ class Circuit(object):
         # return the ID of the junction that was used
         return junction
 
-    # expects the ids of both junctions
+    # expects the ids of both junctions, raises KeyException if an invalid ID
     def connect_junctions(self, junctionA, junctionB):
         j1 = self.node_map[str(junctionA)]
         j2 = self.node_map[str(junctionB)]
-        j1.connections.append(j2)
-        j2.connections.append(j1)
-
-    # takes a list of ids of other nodes
-    def __add_junction(self, connections=[]): # camel case or underscore
-        junction = Junction(self.__get_unique_id(), connections)
-        self.node_map[str(junction.get_id())] = junction
-        self.junctions.append(junction)
+        j1.add_connection(j2)
+        j2.add_connection(j1)
 
     def get_all_junctions(self):
         keys = self.node_map.keys()
         return [self.node_map[x] for x in keys if isinstance(self.node_map[x], Junction)]
 
+# run the file as a standalone script to run the test
 if __name__ == "__main__":
     circuit = Circuit()
     # returns the ids of the two junctions it creates
