@@ -2,7 +2,7 @@ from Component_Types import Two_Prong_Component_Types, Single_Prong_Component_Ty
 from Junction import Junction
 import Component_Single_Prong
 import Component_Two_Prongs
-from Component_Exception import UnknownComponentError
+from Component_Exception import UnknownComponentError, UnrecognizedIdError
 import uuid
 
 ###############################################################################
@@ -90,7 +90,13 @@ class Circuit(object):
         PARAMETERS
         RETURNS
         """
-        id = self.__get_unique_id()
+        # raise exception if provided an id, but it is unrecognized
+        if junction_id1 is not None and str(junction_id1) not in self.node_map:
+            raise UnrecognizedIdError(junction_id1)
+        if junction_id2 is not None and str(junction_id2) not in self.node_map:
+            raise UnrecognizedIdError(junction_id2)
+
+        component_id = self.__get_unique_id()
         if junction_id1 is None:
             junction_id1 = self.__get_unique_id()
         if junction_id2 is None:
@@ -101,9 +107,9 @@ class Circuit(object):
         elif component_type == Two_Prong_Component_Types.CAPACITOR:
             class_type = Component_Two_Prongs.Capacitor
         else:
-            raise UnknownComponentError('Invalid component type')
+            raise UnknownComponentError()
 
-        component = class_type(id, value, junction_id1, junction_id2)
+        component = class_type(component_id, value, junction_id1, junction_id2)
         junction_node1 = self.get_node(junction_id1)
         if junction_node1 is None:
             junction_node1 = Junction(junction_id1)
@@ -128,6 +134,10 @@ class Circuit(object):
         PARAMETERS
         RETURNS
         """
+        # raise exception if provided an id, but it is unrecognized
+        if junction_id is not None and str(junction_id) not in self.node_map:
+            raise UnrecognizedIdError(junction_id)
+
         id = self.__get_unique_id()
         if junction_id is None:
             junction_id = self.__get_unique_id()
@@ -135,7 +145,7 @@ class Circuit(object):
         if component_type == Single_Prong_Component_Types.OPEN:
             class_type = Component_Single_Prong.Open
         else:
-            raise UnknownComponentError('Invalid component type')
+            raise UnknownComponentError()
 
         component = class_type(id, junction_id)
         junction_node = self.get_node(junction_id)
