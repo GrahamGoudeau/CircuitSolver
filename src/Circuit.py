@@ -70,7 +70,15 @@ class Circuit(object):
         self.node_map[str(node.get_id())] = node
 
     ###########################################################################
-    # expects a numeric id, returns None if not found
+    def remove_nodes_from_map(self, nodes):
+        for node in nodes:
+            self.node_map.pop(str(node.get_id()))
+
+    ###########################################################################
+    def remove_node_from_map(self, node):
+        self.node_map.pop(str(node.get_id()))
+
+    ###########################################################################
     def get_node(self, id):
         """
         DESCRIPTION
@@ -158,8 +166,18 @@ class Circuit(object):
         return junction_id
 
     ###########################################################################
+    def connect_junction_to_node(self, junctionA, node):
+        """
+        DESCRIPTION
+        PARAMETERS
+        RETURNS
+        """
+        j1 = self.get_node(str(junctionA))
+        j1.add_connection(node)
+
+    ###########################################################################
     # expects the ids of both junctions, raises KeyException if an invalid ID
-    def connect_junctions(self, junctionA, junctionB):
+    def combine_junctions(self, junctionA, junctionB):
         """
         DESCRIPTION
         PARAMETERS
@@ -167,8 +185,25 @@ class Circuit(object):
         """
         j1 = self.node_map[str(junctionA)]
         j2 = self.node_map[str(junctionB)]
-        j1.add_connection(j2)
-        j2.add_connection(j1)
+
+        j3 = Junction(self.__get_unique_id())
+        j3.connections = j1.connections + j2.connections
+        for node in j3.connections:
+            if isinstance(node, Component_Two_Prongs.Component_Two_Prongs):
+                if node.junctionA == junctionA or node.junctionB == junctionA:
+                    node.junctionA = j3.get_id()
+                if node.junctionA == junctionB or node.junctionB == junctionB:
+                    node.junctionB = j3.get_id()
+            elif isinstance(node, Component_Single_Prong.Component_Single_Prong):
+                if node.junction == junctionA or node.junction == junctionB:
+                    node.junction = j3.get_id()
+            else:
+                raise Exception("Unknown component type")
+
+        self.remove_nodes_from_map([j1, j2])
+        self.add_node_to_map(j3)
+
+        return j3.get_id()
 
     ###########################################################################
     def get_all_junctions(self):
