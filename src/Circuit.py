@@ -2,6 +2,7 @@ from Component_Types import Two_Prong_Component_Types, Single_Prong_Component_Ty
 from Junction import Junction
 import Component_Single_Prong
 import Component_Two_Prongs
+from Component_Exception import UnknownComponentError
 import uuid
 
 ###############################################################################
@@ -100,7 +101,7 @@ class Circuit(object):
         elif component_type == Two_Prong_Component_Types.CAPACITOR:
             class_type = Component_Two_Prongs.Capacitor
         else:
-            raise Exception('Invalid component type')
+            raise UnknownComponentError('Invalid component type')
 
         component = class_type(id, value, junction_id1, junction_id2)
         junction_node1 = self.get_node(junction_id1)
@@ -134,7 +135,7 @@ class Circuit(object):
         if component_type == Single_Prong_Component_Types.OPEN:
             class_type = Component_Single_Prong.Open
         else:
-            raise Exception('Invalid component type')
+            raise UnknownComponentError('Invalid component type')
 
         component = class_type(id, junction_id)
         junction_node = self.get_node(junction_id)
