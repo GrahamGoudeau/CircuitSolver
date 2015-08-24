@@ -11,13 +11,12 @@ class Circuit(object):
     information about their connections and properties
     """
     ###########################################################################
-    def __init__(self, junctions=[]):
+    def __init__(self):
         """
         DESCRIPTION
         PARAMETERS
         RETURNS
         """
-        self.junctions = junctions
         self.node_map = {}
 
     ###########################################################################
