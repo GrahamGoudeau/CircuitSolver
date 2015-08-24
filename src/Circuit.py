@@ -156,8 +156,18 @@ class Circuit(object):
         return junction_id
 
     ###########################################################################
+    def connect_junction_to_node(self, junctionA, node):
+        """
+        DESCRIPTION
+        PARAMETERS
+        RETURNS
+        """
+        j1 = self.get_node(str(junctionA))
+        j1.add_connection(node)
+
+    ###########################################################################
     # expects the ids of both junctions, raises KeyException if an invalid ID
-    def connect_junctions(self, junctionA, junctionB):
+    def combine_junctions(self, junctionA, junctionB):
         """
         DESCRIPTION
         PARAMETERS
