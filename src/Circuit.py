@@ -2,6 +2,7 @@ from Component_Types import Two_Prong_Component_Types, Single_Prong_Component_Ty
 from Junction import Junction
 import Component_Single_Prong
 import Component_Two_Prongs
+import uuid
 
 ###############################################################################
 class Circuit(object):
@@ -17,7 +18,6 @@ class Circuit(object):
         RETURNS
         """
         self.junctions = junctions
-        self.current_id = 1 # increment every time we assign it
         self.node_map = {}
 
     ###########################################################################
@@ -48,9 +48,7 @@ class Circuit(object):
         PARAMETERS
         RETURNS
         """
-        ret_value = self.current_id
-        self.current_id += 1
-        return ret_value
+        return uuid.uuid4()
 
     ###########################################################################
     def add_nodes_to_map(self, nodes):
