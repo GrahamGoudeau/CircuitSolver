@@ -1,6 +1,7 @@
 # camelCase to conform with Python-style exceptions
 class Error(Exception):
-    pass
+    def __init__(self, msg):
+        super(Error, self).__init__(msg)
 
 class UnknownComponentError(Error):
     def __init__(self):
