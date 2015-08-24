@@ -174,6 +174,11 @@ class Circuit(object):
                     node.junctionA = j3.get_id()
                 if node.junctionA == junctionB or node.junctionB == junctionB:
                     node.junctionB = j3.get_id()
+            elif isinstance(node, Component_Single_Prong.Component_Single_Prong):
+                if node.junction == junctionA or node.junction == junctionB:
+                    node.junction = j3.get_id()
+            else:
+                raise Exception("Unknown component type")
 
         self.remove_nodes_from_map([j1, j2])
         self.add_node_to_map(j3)
