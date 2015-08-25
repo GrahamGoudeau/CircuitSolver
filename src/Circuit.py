@@ -234,8 +234,13 @@ def __add_single_prong(component, junction_map, circuit):
     if len(junctions) != 1:
         raise JSON_Exception.WrongNumberOfJunctions(component_type)
 
+    needs_value = False
     if component_type == 'open':
         enum_val = Single_Prong_Component_Types.OPEN
+
+    # TODO: will a single prong component ever have a value we need to store?
+    if needs_value:
+        value = component['value']
 
     junction_name = junctions[0]
     junction_value = junction_map.get(junction_name, None)
@@ -250,12 +255,17 @@ def __add_two_prongs(component, junction_map, circuit):
     if len(junctions) != 2:
         raise JSON_Exception.WrongNumberOfJunctions(component_type)
 
+    needs_value = False
     if component_type == 'resistor':
         enum_val = Two_Prong_Component_Types.RESISTOR
+        needs_value = True
     elif component_type == 'capacitor':
         enum_val = Two_Prong_Component_Types.CAPACITOR
+        needs_value = True
 
-    value = component['value']
+    if needs_value:
+        value = component['value']
+
     junction_name1 = junctions[0]
     junction_name2 = junctions[1]
     junction_value1 = junction_map.get(junction_name1, None)
