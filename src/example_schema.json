@@ -1,0 +1,36 @@
+{
+    "components": [
+        {
+            "name": "open1",
+            "type": "open",
+            "junctions": [
+                "j1"
+            ]
+        },
+        {
+            "name": "open2",
+            "type": "open",
+            "junctions": [
+                "j2"
+            ]
+        },
+        {
+            "name": "R1",
+            "type": "resistor",
+            "value": 5,
+            "junctions": [
+                "j1",
+                "j2"
+            ]
+        },
+        {
+            "name": "R2",
+            "type": "resistor",
+            "value": 50,
+            "junctions": [
+                "j1",
+                "j2"
+            ]
+        }
+    ]
+}
