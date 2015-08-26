@@ -1,7 +1,13 @@
-from Node import Node
+import os
+import sys
+
+dirname = os.path.dirname(__file__)
+sys.path.append(os.path.abspath(dirname + '/' + '../..'))
+
+import node.Node as node
 
 ###############################################################################
-class Junction(Node):
+class Junction(node.Node):
     """
     Is an element of a circuit that connects two or more components together.
     Components are never connected directly together

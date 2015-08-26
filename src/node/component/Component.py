@@ -1,7 +1,17 @@
-from Node import Node
+import os
+import sys
+dirname = os.path.dirname(__file__)
+'''
+Can use if running this file as a script:
+if dirname == '':
+    dirname = '.'
+'''
+sys.path.append(os.path.abspath(dirname + '/' + '../..'))
+
+import node.Node as node
 
 ###############################################################################
-class Component(Node):
+class Component(node.Node):
     """
     An element of a circuit that affects the flow of current in some way, or 
     serves some purpose other than connecting other components
