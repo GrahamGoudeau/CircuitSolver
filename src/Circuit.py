@@ -1,9 +1,12 @@
-from Component_Types import Two_Prong_Component_Types, Single_Prong_Component_Types
-from Junction import Junction
-import Component_Single_Prong
-import Component_Two_Prongs
-from Component_Exception import UnknownComponentError, UnrecognizedIdError
 import uuid
+
+import node.junction.Junction as Junction
+import node.component.Component_Single_Prong as Component_Single_Prong
+import node.component.Component_Two_Prongs as Component_Two_Prongs
+import exception.Component_Exception as Component_Exception
+import exception.JSON_Exception as JSON_Exception
+
+from Component_Types import Two_Prong_Component_Types, Single_Prong_Component_Types
 
 ###############################################################################
 class Circuit(object):
@@ -30,12 +33,12 @@ class Circuit(object):
         keys = self.node_map.keys()
         for key in keys:
             print "Node id: " + key + " is " + str(self.node_map[key])
-            if not isinstance(self.node_map[key], Junction) and \
+            if not isinstance(self.node_map[key], Junction.Junction) and \
                 not isinstance(self.node_map[key], Component_Single_Prong.Open):
                 print "\tConnections: " + str(self.node_map[key].junctionA) + " " + str(self.node_map[key].junctionB)
             if isinstance(self.node_map[key], Component_Two_Prongs.Resistor):
                 print "\tResistance: " + str(self.node_map[key].resistance)
-            if isinstance(self.node_map[key], Junction):
+            if isinstance(self.node_map[key], Junction.Junction):
                 for c in self.node_map[key].connections:
                     print "\tjunction connection id: " + str(c.get_id())
             if isinstance(self.node_map[key], Component_Single_Prong.Open):
@@ -99,9 +102,9 @@ class Circuit(object):
         """
         # raise exception if provided an id, but it is unrecognized
         if junction_id1 is not None and str(junction_id1) not in self.node_map:
-            raise UnrecognizedIdError(junction_id1)
+            raise Component_Exception.UnrecognizedIdError(junction_id1)
         if junction_id2 is not None and str(junction_id2) not in self.node_map:
-            raise UnrecognizedIdError(junction_id2)
+            raise Component_Exception.UnrecognizedIdError(junction_id2)
 
         component_id = self.__get_unique_id()
         if junction_id1 is None:
@@ -114,17 +117,17 @@ class Circuit(object):
         elif component_type == Two_Prong_Component_Types.CAPACITOR:
             class_type = Component_Two_Prongs.Capacitor
         else:
-            raise UnknownComponentError()
+            raise Component_Exception.UnknownComponentError()
 
         component = class_type(component_id, value, junction_id1, junction_id2)
         junction_node1 = self.get_node(junction_id1)
         if junction_node1 is None:
-            junction_node1 = Junction(junction_id1)
+            junction_node1 = Junction.Junction(junction_id1)
         junction_node1.add_connection(component)
 
         junction_node2 = self.get_node(junction_id2)
         if junction_node2 is None:
-            junction_node2 = Junction(junction_id2)
+            junction_node2 = Junction.Junction(junction_id2)
         junction_node2.add_connection(component)
 
         self.add_nodes_to_map([component, junction_node1, junction_node2])
@@ -143,7 +146,7 @@ class Circuit(object):
         """
         # raise exception if provided an id, but it is unrecognized
         if junction_id is not None and str(junction_id) not in self.node_map:
-            raise UnrecognizedIdError(junction_id)
+            raise Component_Exception.UnrecognizedIdError(junction_id)
 
         id = self.__get_unique_id()
         if junction_id is None:
@@ -152,7 +155,7 @@ class Circuit(object):
         if component_type == Single_Prong_Component_Types.OPEN:
             class_type = Component_Single_Prong.Open
         else:
-            raise UnknownComponentError()
+            raise Component_Exception.UnknownComponentError()
 
         component = class_type(id, junction_id)
         junction_node = self.get_node(junction_id)
@@ -198,7 +201,7 @@ class Circuit(object):
                 if node.junction == junctionA or node.junction == junctionB:
                     node.junction = j3.get_id()
             else:
-                raise Exception("Unknown component type")
+                raise Component_Exception.UnknownComponentError()
 
         self.remove_nodes_from_map([j1, j2])
         self.add_node_to_map(j3)
