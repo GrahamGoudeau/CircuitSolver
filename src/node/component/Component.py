@@ -2,6 +2,7 @@ import os
 import sys
 dirname = os.path.dirname(__file__)
 '''
+This is so the file can import from its parent directory;
 Can use if running this file as a script:
 if dirname == '':
     dirname = '.'
