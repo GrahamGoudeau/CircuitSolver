@@ -6,4 +6,8 @@ python:
   - "3.3"
   - "3.4"
 install:
-  pip install flake8
+  pip install pybuilder flake8
+before_script:
+  pyb -v
+script:
+  src/Circuit.py
