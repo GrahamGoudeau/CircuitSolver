@@ -73,13 +73,23 @@ class Circuit(object):
         self.node_map[str(node.get_id())] = node
 
     ###########################################################################
-    def remove_nodes_from_map(self, nodes):
-        for node in nodes:
-            self.node_map.pop(str(node.get_id()))
+    def remove_nodes_from_map(self, ids):
+        ret = []
+        for id in ids:
+            try:
+                node = self.node_map.pop(str(id))
+                ret.append(node)
+            except KeyError:
+                continue
+
+        return ret
 
     ###########################################################################
-    def remove_node_from_map(self, node):
-        self.node_map.pop(str(node.get_id()))
+    def remove_node_from_map(self, id):
+        try:
+            return self.node_map.pop(str(id))
+        except KeyError:
+            return None
 
     ###########################################################################
     def get_node(self, id):
@@ -176,6 +186,8 @@ class Circuit(object):
         RETURNS
         """
         j1 = self.get_node(str(junctionA))
+        if j1 is None:
+            raise Component_Exception.UnrecognizedIdError(j1)
         j1.add_connection(node)
 
     ###########################################################################
@@ -186,10 +198,15 @@ class Circuit(object):
         PARAMETERS
         RETURNS
         """
-        j1 = self.node_map[str(junctionA)]
-        j2 = self.node_map[str(junctionB)]
+        j1 = self.get_node(junctionA)
+        j2 = self.get_node(junctionB)
 
-        j3 = Junction(self.__get_unique_id())
+        if j1 is None:
+            raise Component_Exception.UnrecognizedIdError(j1)
+        if j2 is None:
+            raise Component_Exception.UnrecognizedIdError(j2)
+
+        j3 = Junction.Junction(self.__get_unique_id())
         j3.connections = j1.connections + j2.connections
         for node in j3.connections:
             if isinstance(node, Component_Two_Prongs.Component_Two_Prongs):
