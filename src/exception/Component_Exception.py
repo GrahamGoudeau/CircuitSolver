@@ -1,8 +1,6 @@
-# camelCase to conform with Python-style exceptions
-class Error(Exception):
-    def __init__(self, msg):
-        super(Error, self).__init__(msg)
+from Error import Error
 
+# camelCase to conform with Python-style exceptions
 class UnknownComponentError(Error):
     def __init__(self):
         super(UnknownComponentError, self).__init__('Unrecognized component type')
