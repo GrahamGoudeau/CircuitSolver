@@ -1,4 +1,6 @@
 import uuid
+import json
+import JSON_utils
 
 import node.junction.Junction as Junction
 import node.component.Component_Single_Prong as Component_Single_Prong
@@ -235,14 +237,96 @@ class Circuit(object):
         keys = self.node_map.keys()
         return [self.node_map[x] for x in keys if isinstance(self.node_map[x], Junction)]
 
+def __ensure_names_unique(components):
+    seen_names = []
+    for component in components:
+        name = component['name']
+        if name in seen_names:
+            raise JSON_Exception.NonUniqueComponentName(name)
+        seen_names.append(name)
+
+def __add_single_prong(component, junction_map, circuit):
+    junctions = component['junctions']
+    component_type = component['type']
+    if len(junctions) != 1:
+        raise JSON_Exception.WrongNumberOfJunctions(component_type)
+
+    needs_value = False
+    value = None
+    if component_type == 'open':
+        enum_val = Single_Prong_Component_Types.OPEN
+
+    # TODO: will a single prong component ever have a value we need to store?
+    if needs_value:
+        value = component['value']
+
+    junction_name = junctions[0]
+    junction_value = junction_map.get(junction_name, None)
+    new_junction = circuit.add_single_prong_component(enum_val, junction_value)
+
+    if junction_name not in junction_map:
+        junction_map[junction_name] = new_junction
+
+def __add_two_prongs(component, junction_map, circuit):
+    junctions = component['junctions']
+    component_type = component['type']
+    if len(junctions) != 2:
+        raise JSON_Exception.WrongNumberOfJunctions(component_type)
+
+    needs_value = False
+    value = None
+    if component_type == 'resistor':
+        enum_val = Two_Prong_Component_Types.RESISTOR
+        needs_value = True
+    elif component_type == 'capacitor':
+        enum_val = Two_Prong_Component_Types.CAPACITOR
+        needs_value = True
+
+    # TODO: will a two-prong component ever not have a value?
+    if needs_value:
+        value = component['value']
+
+    junction_name1 = junctions[0]
+    junction_name2 = junctions[1]
+    junction_value1 = junction_map.get(junction_name1, None)
+    junction_value2 = junction_map.get(junction_name2, None)
+
+    new_junction1, new_junction2 = \
+            circuit.add_two_prong_component(enum_val, value, junction_value1, junction_value2)
+
+    if junction_name1 not in junction_map:
+        junction_map[junction_name1] = junction_value1
+    if junction_name2 not in junction_map:
+        junction_map[junction_name2] = junction_value2
+
+
+# expects a stringified JSON conformant to the schema in the root directory
+def parse_circuit_json(json_string):
+    root_map = json.loads(json_string)
+    components = root_map['components']
+
+    # raises exception if not all names unique
+    __ensure_names_unique(components)
+    junction_map = {}
+    circuit = Circuit()
+
+    for component in components:
+        junctions = component['junctions']
+        component_type = component['type']
+        if component_type in JSON_utils.json_single_prong:
+            __add_single_prong(component, junction_map, circuit)
+        elif component_type in JSON_utils.json_two_prongs:
+            __add_two_prongs(component, junction_map, circuit)
+        else:
+            raise JSON_Exception.UnknownJSONTypeError(component_type)
+
+    return circuit
+
+
 ###############################################################################
 # run the file as a standalone script to run the test
 if __name__ == "__main__":
-    circuit = Circuit()
-    # returns the ids of the two junctions it creates
-    j1, j2 = circuit.add_two_prong_component(Two_Prong_Component_Types.RESISTOR, 5)
-    circuit.add_two_prong_component(Two_Prong_Component_Types.CAPACITOR, 10, j1, j2)
-    _, y = circuit.add_two_prong_component(Two_Prong_Component_Types.RESISTOR, 100, j1)
-    circuit.add_single_prong_component(Single_Prong_Component_Types.OPEN, y)
-    circuit.debug_map()
-
+    with open('example_schema.json', 'r') as f:
+        json_string = f.read()
+        circuit = parse_circuit_json(json_string)
+        circuit.debug_map()
