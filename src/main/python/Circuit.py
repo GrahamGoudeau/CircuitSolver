@@ -1,3 +1,4 @@
+from __future__ import print_function
 import uuid
 import json
 import JSON_utils
@@ -37,18 +38,18 @@ class Circuit(object):
         keys = self.node_map.keys()
         for key in keys:
             node = self.node_map[key]
-            print "Node id: " + key + " is " + str(node)
+            print("Node id: " + key + " is " + str(node))
             if not isinstance(node, Junction.Junction) and \
                     not isinstance(node, Component_Single_Prong.Open):
-                print "\tConnections: " +\
-                    str(node.junctionA) + " " + str(node.junctionB)
+                print("\tConnections: " +
+                      str(node.junctionA) + " " + str(node.junctionB))
             if isinstance(node, Component_Two_Prongs.Resistor):
-                print "\tResistance: " + str(node.resistance)
+                print("\tResistance: " + str(node.resistance))
             if isinstance(node, Junction.Junction):
                 for c in node.connections:
-                    print "\tjunction connection id: " + str(c.get_id())
+                    print("\tjunction connection id: " + str(c.get_id()))
             if isinstance(node, Component_Single_Prong.Open):
-                print "\tConnection: " + str(node.junction)
+                print("\tConnection: " + str(node.junction))
 
     ###########################################################################
     def __get_unique_id(self):
