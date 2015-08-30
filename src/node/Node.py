@@ -10,7 +10,7 @@ class Node(object):
             Constructor for Node
         PARAMETERS
             id, int, required
-                This is the unique id of the Node so that it can be 
+                This is the unique id of the Node so that it can be
                 identified
         RETURNS
             New instance of a Node

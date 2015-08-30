@@ -12,7 +12,6 @@ sys.path.append(os.path.abspath(dirname + '/' + '../../../'))
 import src.Circuit as Circuit
 import src.node.Node as Node
 import src.Component_Types as Component_Types
-import src.node.junction.Junction as Junction
 import src.exception.Component_Exception as Component_Exception
 
 

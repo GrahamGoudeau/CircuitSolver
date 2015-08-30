@@ -8,12 +8,14 @@ import node.component.Component_Two_Prongs as Component_Two_Prongs
 import exception.Component_Exception as Component_Exception
 import exception.JSON_Exception as JSON_Exception
 
-from Component_Types import Two_Prong_Component_Types, Single_Prong_Component_Types
+from Component_Types import Two_Prong_Component_Types,\
+    Single_Prong_Component_Types
+
 
 ###############################################################################
 class Circuit(object):
     """
-    Representation of a circuit. Holds nodes (components and junctions) and 
+    Representation of a circuit. Holds nodes (components and junctions) and
     information about their connections and properties
     """
     ###########################################################################
@@ -34,17 +36,19 @@ class Circuit(object):
         """
         keys = self.node_map.keys()
         for key in keys:
-            print "Node id: " + key + " is " + str(self.node_map[key])
-            if not isinstance(self.node_map[key], Junction.Junction) and \
-                not isinstance(self.node_map[key], Component_Single_Prong.Open):
-                print "\tConnections: " + str(self.node_map[key].junctionA) + " " + str(self.node_map[key].junctionB)
-            if isinstance(self.node_map[key], Component_Two_Prongs.Resistor):
-                print "\tResistance: " + str(self.node_map[key].resistance)
-            if isinstance(self.node_map[key], Junction.Junction):
-                for c in self.node_map[key].connections:
+            node = self.node_map[key]
+            print "Node id: " + key + " is " + str(node)
+            if not isinstance(node, Junction.Junction) and \
+                    not isinstance(node, Component_Single_Prong.Open):
+                print "\tConnections: " +\
+                    str(node.junctionA) + " " + str(node.junctionB)
+            if isinstance(node, Component_Two_Prongs.Resistor):
+                print "\tResistance: " + str(node.resistance)
+            if isinstance(node, Junction.Junction):
+                for c in node.connections:
                     print "\tjunction connection id: " + str(c.get_id())
-            if isinstance(self.node_map[key], Component_Single_Prong.Open):
-                print "\tConnection: " + str(self.node_map[key].junction)
+            if isinstance(node, Component_Single_Prong.Open):
+                print "\tConnection: " + str(node.junction)
 
     ###########################################################################
     def __get_unique_id(self):
@@ -106,7 +110,7 @@ class Circuit(object):
     # expects a member of the two prong type enum
     # creates new junctions and assigns IDs if not provided them
     def add_two_prong_component(self, component_type,
-                        value, junction_id1=None, junction_id2=None):
+                                value, junction_id1=None, junction_id2=None):
         """
         DESCRIPTION
         PARAMETERS
@@ -210,13 +214,15 @@ class Circuit(object):
 
         j3 = Junction.Junction(self.__get_unique_id())
         j3.connections = j1.connections + j2.connections
+        single_prong = Component_Single_Prong.Component_Single_Prong
+        two_prongs = Component_Two_Prongs.Component_Two_Prongs
         for node in j3.connections:
-            if isinstance(node, Component_Two_Prongs.Component_Two_Prongs):
+            if isinstance(node, two_prongs):
                 if node.junctionA == junctionA or node.junctionB == junctionA:
                     node.junctionA = j3.get_id()
                 if node.junctionA == junctionB or node.junctionB == junctionB:
                     node.junctionB = j3.get_id()
-            elif isinstance(node, Component_Single_Prong.Component_Single_Prong):
+            elif isinstance(node, single_prong):
                 if node.junction == junctionA or node.junction == junctionB:
                     node.junction = j3.get_id()
             else:
@@ -227,15 +233,6 @@ class Circuit(object):
 
         return j3.get_id()
 
-    ###########################################################################
-    def get_all_junctions(self):
-        """
-        DESCRIPTION
-        PARAMETERS
-        RETURNS
-        """
-        keys = self.node_map.keys()
-        return [self.node_map[x] for x in keys if isinstance(self.node_map[x], Junction)]
 
 def __ensure_names_unique(components):
     seen_names = []
@@ -245,27 +242,24 @@ def __ensure_names_unique(components):
             raise JSON_Exception.NonUniqueComponentName(name)
         seen_names.append(name)
 
+
 def __add_single_prong(component, junction_map, circuit):
     junctions = component['junctions']
     component_type = component['type']
     if len(junctions) != 1:
         raise JSON_Exception.WrongNumberOfJunctions(component_type)
 
-    needs_value = False
-    value = None
     if component_type == 'open':
         enum_val = Single_Prong_Component_Types.OPEN
 
     # TODO: will a single prong component ever have a value we need to store?
-    if needs_value:
-        value = component['value']
-
     junction_name = junctions[0]
     junction_value = junction_map.get(junction_name, None)
     new_junction = circuit.add_single_prong_component(enum_val, junction_value)
 
     if junction_name not in junction_map:
         junction_map[junction_name] = new_junction
+
 
 def __add_two_prongs(component, junction_map, circuit):
     junctions = component['junctions']
@@ -292,7 +286,10 @@ def __add_two_prongs(component, junction_map, circuit):
     junction_value2 = junction_map.get(junction_name2, None)
 
     new_junction1, new_junction2 = \
-            circuit.add_two_prong_component(enum_val, value, junction_value1, junction_value2)
+        circuit.add_two_prong_component(enum_val,
+                                        value,
+                                        junction_value1,
+                                        junction_value2)
 
     if junction_name1 not in junction_map:
         junction_map[junction_name1] = junction_value1
@@ -311,7 +308,6 @@ def parse_circuit_json(json_string):
     circuit = Circuit()
 
     for component in components:
-        junctions = component['junctions']
         component_type = component['type']
         if component_type in JSON_utils.json_single_prong:
             __add_single_prong(component, junction_map, circuit)

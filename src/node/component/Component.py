@@ -11,10 +11,11 @@ sys.path.append(os.path.abspath(dirname + '/' + '../..'))
 
 import node.Node as node
 
+
 ###############################################################################
 class Component(node.Node):
     """
-    An element of a circuit that affects the flow of current in some way, or 
+    An element of a circuit that affects the flow of current in some way, or
     serves some purpose other than connecting other components
     """
     ###########################################################################
