@@ -176,7 +176,7 @@ class Circuit(object):
         component = class_type(id, junction_id)
         junction_node = self.get_node(junction_id)
         if junction_node is None:
-            junction_node = Junction(junction_id)
+            junction_node = Junction.Junction(junction_id)
         junction_node.add_connection(component)
 
         self.add_nodes_to_map([component, junction_node])
