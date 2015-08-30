@@ -9,10 +9,10 @@ if dirname == '':
 
 sys.path.append(os.path.abspath(dirname + '/' + '../../../'))
 
-import src.Circuit as Circuit
-import src.node.Node as Node
-import src.Component_Types as Component_Types
-import src.exception.Component_Exception as Component_Exception
+import src.main.python.Circuit as Circuit
+import src.main.python.node.Node as Node
+import src.main.python.Component_Types as Component_Types
+import src.main.python.exception.Component_Exception as Component_Exception
 
 
 class TestCoreCircuitAPIMethods(unittest.TestCase):
