@@ -9,4 +9,5 @@ install:
 before_script:
   pyb -v
 script:
-  src/Circuit.py
+  cd src/main/python/
+  python Circuit.py
