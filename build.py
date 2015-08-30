@@ -19,5 +19,7 @@ authors=[Author('Graham Goudeau', 'grahamgoudeau@gmail.com'),
 def init(project):
     project.set_property('flake8_verbose_output', True)
     project.set_property('flake8_break_build', True)
+    project.set_property('flake8_max_line_length', 79)
+    project.set_property('flake8_include_test_sources', True)
 
 default_task = ['analyze', 'publish']
