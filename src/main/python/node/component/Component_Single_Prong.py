@@ -1,5 +1,6 @@
 from Component import Component
 
+
 ###############################################################################
 class Component_Single_Prong(Component):
     """
@@ -19,12 +20,13 @@ class Component_Single_Prong(Component):
         super(Component_Single_Prong, self).__init__(id)
         self.junction = junction
 
+
 ###############################################################################
 class Open(Component_Single_Prong):
     """
-    A circuit component that describes a node to look into the circuit at. 
-    When computing equivalent resistance, capacitance, or inductance, 
-    there must be two of these in the circuit that define the equivalent 
+    A circuit component that describes a node to look into the circuit at.
+    When computing equivalent resistance, capacitance, or inductance,
+    there must be two of these in the circuit that define the equivalent
     resistance, capacitance, or inductance between those points
     """
     ###########################################################################

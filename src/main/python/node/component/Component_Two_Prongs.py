@@ -1,5 +1,6 @@
 from Component import Component
 
+
 ###############################################################################
 class Component_Two_Prongs(Component):
     """
@@ -23,6 +24,7 @@ class Component_Two_Prongs(Component):
         super(Component_Two_Prongs, self).__init__(id)
         self.junctionA = junctionA
         self.junctionB = junctionB
+
 
 ###############################################################################
 class Resistor(Component_Two_Prongs):
@@ -48,6 +50,7 @@ class Resistor(Component_Two_Prongs):
         """
         super(Resistor, self).__init__(id, junctionA, junctionB)
         self.resistance = resistance
+
 
 ###############################################################################
 class Capacitor(Component_Two_Prongs):
