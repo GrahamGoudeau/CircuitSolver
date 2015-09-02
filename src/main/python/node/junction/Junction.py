@@ -6,6 +6,7 @@ sys.path.append(os.path.abspath(dirname + '/' + '../..'))
 
 import node.Node as node
 
+
 ###############################################################################
 class Junction(node.Node):
     """
@@ -24,13 +25,13 @@ class Junction(node.Node):
             New instance of a Junction
         """
         super(Junction, self).__init__(id)
-        self.connections = [] # array of nodes
+        self.connections = []  # array of nodes
 
     ###########################################################################
     def add_connection(self, node):
         """
         DESCRIPTION
-            Adds a new connection to the junction, that connection could be 
+            Adds a new connection to the junction, that connection could be
             a component or another junction
         PARAMETERS
             node, Node, required
